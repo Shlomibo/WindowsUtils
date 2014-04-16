@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utilities;
 
-namespace Windows
+namespace Utilities.Windows
 {
 	/// <summary>
 	/// Wraps unsafe pointers as disposable objects.

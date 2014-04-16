@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Windows
+namespace Utilities.Windows
 {
 	partial class GlobalHotKey
 	{

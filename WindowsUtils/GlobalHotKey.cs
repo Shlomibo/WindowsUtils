@@ -12,7 +12,7 @@ using Utilities.TypeEditors;
 using System.Drawing.Design;
 using System.ComponentModel.Design;
 
-namespace Windows
+namespace Utilities.Windows
 {
 	/// <summary>
 	/// A components to register global hot key.

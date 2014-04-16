@@ -29,14 +29,14 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.hotkey = new Windows.GlobalHotKey(this.components);
+			this.hotkey = new Utilities.Windows.GlobalHotKey(this.components);
 			this.SuspendLayout();
 			// 
 			// hotkey
 			// 
 			this.hotkey.ContainerControl = this;
 			this.hotkey.KeyCode = System.Windows.Forms.Keys.B;
-			this.hotkey.Modifiers = ((Windows.Modifiers)((Windows.Modifiers.Alt | Windows.Modifiers.Control)));
+			this.hotkey.Modifiers = ((Utilities.Windows.Modifiers)((Utilities.Windows.Modifiers.Alt | Utilities.Windows.Modifiers.Control)));
 			this.hotkey.HotKeyPressed += new System.EventHandler(this.hotkey_HotKeyPressed);
 			// 
 			// Form1
@@ -53,7 +53,7 @@
 
 		#endregion
 
-		private Windows.GlobalHotKey hotkey;
+		private Utilities.Windows.GlobalHotKey hotkey;
 
 
 
