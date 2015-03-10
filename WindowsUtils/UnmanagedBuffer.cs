@@ -142,8 +142,8 @@ namespace Windows
 		/// <param name="bytesToCopy">The ammount of bytes to be copies.</param>
 		public unsafe void CopyTo(UnmanagedBuffer otherBuffer, int bytesToCopy)
 		{
-			if ((this.Size.HasValue && (this.Size < bytesToCopy)) ||
-				(otherBuffer.Size.HasValue && (otherBuffer.Size < bytesToCopy)))
+			if ((this.Size < bytesToCopy) ||
+				(otherBuffer.Size < bytesToCopy))
 			{
 				throw new ArgumentOutOfRangeException("Buffers are smaller than the copied size");
 			}
@@ -258,15 +258,25 @@ namespace Windows
 		/// Returns enumeration of the elements in the buffer.
 		/// </summary>
 		/// <typeparam name="T">The type of elements in the buffer</typeparam>
-		/// <param name="endOfBufferMarker">The elements sequence in the end of the buffer.</param>
+		/// <param name="endOfBufferMarkers">The elements sequence in the end of the buffer.</param>
 		/// <returns>Enumeration of the elements in the buffer, not including the endOfBuffer</returns>
-		public IEnumerable<T> AsEnumerable<T>(T[] endOfBufferMarker)
+		public IEnumerable<T> AsEnumerable<T>(T[] endOfBufferMarkers)
 		{
+			if (endOfBufferMarkers == null)
+			{
+				throw new NullReferenceException(nameof(endOfBufferMarkers));
+			}
+
+			if (!endOfBufferMarkers.Any())
+			{
+				throw new ArgumentException(nameof(endOfBufferMarkers));
+			}
+
 			for (int i = 0; true; i += Marshal.SizeOf(typeof(T)))
 			{
 				var element = (T)Marshal.PtrToStructure(this.Object + i, typeof(T));
 
-				if (!element.Equals(endOfBufferMarker))
+				if (!endOfBufferMarkers.Any(marker => object.Equals(element, marker)))
 				{
 					yield return element;
 				}
@@ -285,150 +295,120 @@ namespace Windows
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static implicit operator IntPtr(UnmanagedBuffer obj)
-		{
-			return obj.Object;
-		}
+		public static implicit operator IntPtr(UnmanagedBuffer obj) =>
+			obj.Object;
 
 		/// <summary>
 		/// Implicit cast into void*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe implicit operator void*(UnmanagedBuffer obj)
-		{
-			return (void*)obj.Object;
-		}
+		public static unsafe implicit operator void*(UnmanagedBuffer obj) =>
+			(void*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into sbyte*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator sbyte*(UnmanagedBuffer obj)
-		{
-			return (sbyte*)obj.Object;
-		}
+		public static unsafe explicit operator sbyte*(UnmanagedBuffer obj) =>
+			(sbyte*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into byte*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator byte*(UnmanagedBuffer obj)
-		{
-			return (byte*)obj.Object;
-		}
+		public static unsafe explicit operator byte*(UnmanagedBuffer obj) =>
+			(byte*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into short*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator short*(UnmanagedBuffer obj)
-		{
-			return (short*)obj.Object;
-		}
+		public static unsafe explicit operator short*(UnmanagedBuffer obj) =>
+			(short*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into ushort*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator ushort*(UnmanagedBuffer obj)
-		{
-			return (ushort*)obj.Object;
-		}
+		public static unsafe explicit operator ushort*(UnmanagedBuffer obj) =>
+			(ushort*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into int*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator int*(UnmanagedBuffer obj)
-		{
-			return (int*)obj.Object;
-		}
+		public static unsafe explicit operator int*(UnmanagedBuffer obj) =>
+			(int*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into uint*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator uint*(UnmanagedBuffer obj)
-		{
-			return (uint*)obj.Object;
-		}
+		public static unsafe explicit operator uint*(UnmanagedBuffer obj) =>
+			(uint*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into long*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator long*(UnmanagedBuffer obj)
-		{
-			return (long*)obj.Object;
-		}
+		public static unsafe explicit operator long*(UnmanagedBuffer obj) =>
+			(long*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into ulong*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator ulong*(UnmanagedBuffer obj)
-		{
-			return (ulong*)obj.Object;
-		}
+		public static unsafe explicit operator ulong*(UnmanagedBuffer obj) =>
+			(ulong*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into char*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator char*(UnmanagedBuffer obj)
-		{
-			return (char*)obj.Object;
-		}
+		public static unsafe explicit operator char*(UnmanagedBuffer obj) =>
+			(char*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into float*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator float*(UnmanagedBuffer obj)
-		{
-			return (float*)obj.Object;
-		}
+		public static unsafe explicit operator float*(UnmanagedBuffer obj) =>
+			(float*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into double*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator double*(UnmanagedBuffer obj)
-		{
-			return (double*)obj.Object;
-		}
+		public static unsafe explicit operator double*(UnmanagedBuffer obj) =>
+			(double*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into decimal*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator decimal*(UnmanagedBuffer obj)
-		{
-			return (decimal*)obj.Object;
-		}
+		public static unsafe explicit operator decimal*(UnmanagedBuffer obj) =>
+			(decimal*)obj.Object;
 
 		/// <summary>
 		/// Explicit cast into bool*
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
-		public static unsafe explicit operator bool*(UnmanagedBuffer obj)
-		{
-			return (bool*)obj.Object;
-		}
+		public static unsafe explicit operator bool*(UnmanagedBuffer obj) =>
+			(bool*)obj.Object;
 		#endregion
 	}
 

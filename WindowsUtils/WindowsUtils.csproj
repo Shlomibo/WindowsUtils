@@ -48,6 +48,8 @@
     <Compile Include="Interop\Security.cs" />
     <Compile Include="Interop\Windows.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\DataProtection.cs" />
+    <Compile Include="Security\SecuredArray.cs" />
     <Compile Include="UnmanagedBuffer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

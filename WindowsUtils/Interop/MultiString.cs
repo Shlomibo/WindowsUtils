@@ -206,18 +206,10 @@ namespace Windows.Interop
 		/// <returns>The index of string if found in the list; otherwise, -1.</returns>
 		public int IndexOf(string str)
 		{
-			int index = NOT_FOUND;
-
-			for (int i = 0; i < this.strings.Count; i++)
-			{
-				if (this.strings[i].ToString() == str)
-				{
-					index = i;
-					break;
-				}
-			}
-
-			return index;
+			return this.strings.Select((String, index) => new { String, Index = (int?)index })
+							   .Where(item => item.String == str)
+							   .Select(item => item.Index)
+							   .FirstOrDefault() ?? NOT_FOUND;
 		}
 
 		/// <summary>
@@ -226,6 +218,11 @@ namespace Windows.Interop
 		/// <param name="index">The zero-based index of the string to remove.</param>
 		public void RemoveAt(int index)
 		{
+			if ((index < 0) || (index >= this.Count))
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+
 			string old = this[index];
 			this.strings.RemoveAt(index);
 			bool didChanged = false;
@@ -260,6 +257,16 @@ namespace Windows.Interop
 		/// <param name="str">The string to insert into the MultiString.</param>
 		public void Insert(int index, string str)
 		{
+			if ((index < 0) || (index > this.Count))
+			{
+				throw new ArgumentOutOfRangeException(nameof(index));
+			}
+
+			if (str == null)
+			{
+				throw new NullReferenceException(nameof(str));
+			}
+
 			this.strings.Insert(index, str);
 			bool didChanged = false;
 
@@ -292,6 +299,11 @@ namespace Windows.Interop
 		/// <param name="str">The string to add to the MultiString.</param>
 		public void Add(string str)
 		{
+			if (str == null)
+			{
+				throw new NullReferenceException(nameof(str));
+			}
+
 			this.strings.Add(str);
 			bool didChanged = false;
 
@@ -370,10 +382,7 @@ namespace Windows.Interop
 		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
 		public void CopyTo(string[] array, int arrayIndex)
 		{
-			for (int i = 0; i < this.Count; i++)
-			{
-				array[i + arrayIndex] = this[i];
-			}
+			this.strings.CopyTo(array, arrayIndex);
 		}
 
 		/// <summary>
@@ -433,7 +442,7 @@ namespace Windows.Interop
 		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
-			return string.Join("\0", this) + "\0";
+			return string.Join("\0", this.strings) + "\0";
 		}
 		#endregion
 	}
